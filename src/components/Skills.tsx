@@ -46,9 +46,9 @@ export const Skills: React.FC = () => {
       skills: [
         'AWS (EC2, S3, Lambda)',
         'Docker, CI/CD Pipelines',
-        'GitHub Actions, Azure DevOps',
+        'GitHub Actions, GitHub Pages',
         'Vercel, Hostinger',
-        'Infrastructure as Code'
+        'Azure DevOps, Azure Pipelines'
       ]
     },
     {
@@ -137,8 +137,8 @@ export const Skills: React.FC = () => {
                 'Strapi (Headless CMS)',
                 'Chatbot API Migration',
                 'Bamboo CI/CD',
-                'Azure Pipelines',
-                'GitHub Pages'
+                'Git Version Control',
+                'Agile Methodologies',
               ].map((tech, index) => (
                 <div
                   key={tech}
