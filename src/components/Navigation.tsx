@@ -15,6 +15,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activeSection, onSection
     { id: 'about', label: 'About' },
     { id: 'skills', label: 'Skills' },
     { id: 'experience', label: 'Experience' },
+    { id: 'projects', label: 'Projects' },
     { id: 'contact', label: 'Contact' },
   ];
 
@@ -27,9 +28,8 @@ export const Navigation: React.FC<NavigationProps> = ({ activeSection, onSection
   }, []);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled ? 'bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 backdrop-blur-md shadow-lg' : 'bg-transparent'
-    }`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 backdrop-blur-md shadow-lg' : 'bg-transparent'
+      }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -42,13 +42,12 @@ export const Navigation: React.FC<NavigationProps> = ({ activeSection, onSection
               <button
                 key={item.id}
                 onClick={() => onSectionChange(item.id)}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
-                  activeSection === item.id
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 ${activeSection === item.id
                     ? 'text-blue-600 bg-blue-50'
                     : scrolled
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hover:text-blue-600'
-                    : 'text-white hover:text-blue-300'
-                }`}
+                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hover:text-blue-600'
+                      : 'text-white hover:text-blue-300'
+                  }`}
               >
                 {item.label}
               </button>
@@ -77,11 +76,10 @@ export const Navigation: React.FC<NavigationProps> = ({ activeSection, onSection
                     onSectionChange(item.id);
                     setIsOpen(false);
                   }}
-                  className={`block px-3 py-2 rounded-md text-base font-medium w-full text-left transition-all duration-300 ${
-                    activeSection === item.id
+                  className={`block px-3 py-2 rounded-md text-base font-medium w-full text-left transition-all duration-300 ${activeSection === item.id
                       ? 'text-blue-600 bg-blue-50'
                       : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
-                  }`}
+                    }`}
                 >
                   {item.label}
                 </button>

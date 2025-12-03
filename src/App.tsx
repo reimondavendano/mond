@@ -5,13 +5,14 @@ import { About } from './components/About';
 import { Skills } from './components/Skills';
 import { Experience } from './components/Experience';
 import { Contact } from './components/Contact';
+import { Projects } from './components/Projects';
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['home', 'about', 'skills', 'experience', 'contact'];
+      const sections = ['home', 'about', 'skills', 'experience', 'projects', 'contact'];
       const scrollPosition = window.scrollY + 100;
 
       for (const section of sections) {
@@ -46,24 +47,28 @@ function App() {
   return (
     <div className="min-h-screen">
       <Navigation activeSection={activeSection} onSectionChange={scrollToSection} />
-      
+
       <main>
         <section id="home">
           <Hero onScrollToNext={scrollToNext} />
         </section>
-        
+
         <section id="about">
           <About />
         </section>
-        
+
         <section id="skills">
           <Skills />
         </section>
-        
+
         <section id="experience">
           <Experience />
         </section>
-        
+
+        <section id="projects">
+          <Projects />
+        </section>
+
         <section id="contact">
           <Contact />
         </section>

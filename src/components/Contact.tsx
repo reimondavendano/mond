@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, Github, Linkedin, Download } from 'lucide-react';
+import Pusher from 'pusher-js';
 
 export const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -9,11 +10,40 @@ export const Contact: React.FC = () => {
     message: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    const mailtoLink = `mailto:reimondavendano@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)}`;
-    window.open(mailtoLink);
+
+    // PUSHER CONFIGURATION
+    const pusher = new Pusher(import.meta.env.VITE_PUSHER_KEY, {
+      cluster: import.meta.env.VITE_PUSHER_CLUSTER || 'ap1'
+    });
+
+    const channel = pusher.subscribe('contact-channel');
+
+    // NOTE: Client events must be enabled in your Pusher Dashboard
+    // and the event name must start with 'client-'
+    try {
+      channel.bind('pusher:subscription_succeeded', () => {
+        const triggered = channel.trigger('client-message', {
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+          timestamp: new Date().toISOString()
+        });
+
+        if (triggered) {
+          alert('Message sent successfully!');
+          setFormData({ name: '', email: '', subject: '', message: '' });
+        } else {
+          alert('Failed to send message. Please try again.');
+        }
+      });
+    } catch (error) {
+      console.error('Pusher error:', error);
+      // Fallback to mailto
+      window.location.href = `mailto:reimondavendano@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)}`;
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -41,7 +71,7 @@ export const Contact: React.FC = () => {
           <div className="space-y-8">
             <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8">
               <h3 className="text-2xl font-bold text-white mb-8">Contact Information</h3>
-              
+
               <div className="space-y-6">
                 <div className="flex items-center group">
                   <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
@@ -82,7 +112,7 @@ export const Contact: React.FC = () => {
             {/* Social Links & Actions */}
             <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8">
               <h3 className="text-2xl font-bold text-white mb-6">Connect & Download</h3>
-              
+
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <a
                   href="https://www.linkedin.com/in/reimond-mark-avenda%C3%B1o-92515797/" target='_blank'
@@ -92,7 +122,7 @@ export const Contact: React.FC = () => {
                   LinkedIn
                 </a>
                 <a
-                  href="#"
+                  href="https://github.com/reimondavendano" target='_blank'
                   className="flex items-center justify-center p-4 bg-gradient-to-r from-gray-700 to-gray-800 rounded-xl text-white font-semibold hover:from-gray-800 hover:to-gray-900 transform hover:scale-105 transition-all duration-300"
                 >
                   <Github size={20} className="mr-2" />
@@ -100,10 +130,14 @@ export const Contact: React.FC = () => {
                 </a>
               </div>
 
-              <button className="w-full flex items-center justify-center p-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl text-white font-semibold hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300">
+              <a
+                href="/assets/resume.pdf"
+                download="Reimond_Mark_Avendano_Resume.pdf"
+                className="w-full flex items-center justify-center p-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl text-white font-semibold hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300"
+              >
                 <Download size={20} className="mr-2" />
                 Download Resume
-              </button>
+              </a>
             </div>
 
             {/* Availability */}
@@ -122,7 +156,7 @@ export const Contact: React.FC = () => {
           {/* Contact Form */}
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8">
             <h3 className="text-2xl font-bold text-white mb-8">Send a Message</h3>
-            
+
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>

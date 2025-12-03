@@ -56,7 +56,7 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToNext }) => {
           <div className="space-y-8 animate-fade-in">
             <div className="space-y-6">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight text-left">
-                <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent animate-gradient-x">
+                <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent animate-gradient-x ">
                   Hi, I'm Reimond Mark Avendano,
                 </span>
               </h1>
@@ -64,7 +64,7 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToNext }) => {
               <div className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-200 h-16 flex items-center">
                 <AnimatedText 
                   texts={roles}
-                  className="bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent"
+                  className="bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent animate-gradient-x"
                 />
               </div>
             </div>
