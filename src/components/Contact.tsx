@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Mail, Phone, MapPin, Send, Github, Linkedin, Download } from 'lucide-react';
-import Pusher from 'pusher-js';
+import emailjs from '@emailjs/browser';
 
 export const Contact: React.FC = () => {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -12,37 +14,39 @@ export const Contact: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
-    // PUSHER CONFIGURATION
-    const pusher = new Pusher(import.meta.env.VITE_PUSHER_KEY, {
-      cluster: import.meta.env.VITE_PUSHER_CLUSTER || 'ap1'
-    });
+    // EMAILJS CONFIGURATION
+    // 1. Go to https://www.emailjs.com/ and sign up for free
+    // 2. Create a new Email Service (e.g., Gmail) -> Get Service ID
+    // 3. Create a new Email Template -> Get Template ID
+    // 4. Go to Account -> API Keys -> Get Public Key
+    // 5. Add these to your .env.local file:
+    //    VITE_EMAILJS_SERVICE_ID=your_service_id
+    //    VITE_EMAILJS_TEMPLATE_ID=your_template_id
+    //    VITE_EMAILJS_PUBLIC_KEY=your_public_key
 
-    const channel = pusher.subscribe('contact-channel');
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID_PLACEHOLDER';
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID_PLACEHOLDER';
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY_PLACEHOLDER';
 
-    // NOTE: Client events must be enabled in your Pusher Dashboard
-    // and the event name must start with 'client-'
     try {
-      channel.bind('pusher:subscription_succeeded', () => {
-        const triggered = channel.trigger('client-message', {
-          name: formData.name,
-          email: formData.email,
-          subject: formData.subject,
-          message: formData.message,
-          timestamp: new Date().toISOString()
-        });
-
-        if (triggered) {
-          alert('Message sent successfully!');
-          setFormData({ name: '', email: '', subject: '', message: '' });
-        } else {
-          alert('Failed to send message. Please try again.');
-        }
-      });
+      if (formRef.current) {
+        await emailjs.sendForm(
+          serviceId,
+          templateId,
+          formRef.current,
+          publicKey
+        );
+        alert('Message sent successfully!');
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      }
     } catch (error) {
-      console.error('Pusher error:', error);
+      console.error('EmailJS error:', error);
       // Fallback to mailto
       window.location.href = `mailto:reimondavendano@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)}`;
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -157,7 +161,7 @@ export const Contact: React.FC = () => {
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8">
             <h3 className="text-2xl font-bold text-white mb-8">Send a Message</h3>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-gray-300 text-sm font-medium mb-2">Name</label>
@@ -213,10 +217,11 @@ export const Contact: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full flex items-center justify-center px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-semibold rounded-xl hover:from-cyan-600 hover:to-purple-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+                disabled={isSubmitting}
+                className={`w-full flex items-center justify-center px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-semibold rounded-xl hover:from-cyan-600 hover:to-purple-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <Send size={20} className="mr-2" />
-                Send Message
+                {isSubmitting ? 'Sending...' : 'Send Message'}
               </button>
             </form>
           </div>

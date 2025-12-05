@@ -47,11 +47,11 @@ export const Projects: React.FC = () => {
             tags: ["Service App", "React", "Firebase"]
         },
         {
-            title: "Powertech Inventory",
-            description: "Inventory management system for Powertech Enterprises.",
+            title: "PowerTech Enterprises",
+            description: "Official website for PowerTech Enterprises, featuring products and PC builder.",
             image: "/assets/powertech.PNG",
-            link: "https://powertech-ent.vercel.app/",
-            tags: ["Inventory", "React", "Database"]
+            link: "https://powertech-enterprises.vercel.app/",
+            tags: ["Next.js", "React", "Supabase"]
         },
         {
             title: "Deliciosa Frontyard Cafe",
@@ -59,6 +59,13 @@ export const Projects: React.FC = () => {
             image: "/assets/deliciosa.PNG",
             link: "https://deliciosa-frontyard-coffee.vercel.app/",
             tags: ["Cafe", "Landing Page", "React"]
+        },
+        {
+            title: "Kafe Barako",
+            description: "A modern coffee shop website featuring menu, packages, testimonials, and booking system for Kafe Barako.",
+            image: "/assets/kafe-barako.PNG",
+            link: "https://kafe-barako.vercel.app/",
+            tags: ["Coffee Shop", "Next.js", "Booking"]
         },
         {
             title: "AllStar Tech",
