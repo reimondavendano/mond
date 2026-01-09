@@ -12,6 +12,13 @@ interface Project {
 export const Projects: React.FC = () => {
     const projects: Project[] = [
         {
+            title: "GoCart Plaridel",
+            description: "A multi-vendor marketplace for electronics, fashion, beauty, and more. Enjoy exclusive deals, GoCart product insights, and seamless shopping.",
+            image: "/assets/go-cart.PNG",
+            link: "https://gocart-plaridel.vercel.app/",
+            tags: ["Next.js", "Supabase", "Tailwind CSS"]
+        },
+        {
             title: "J and A Wedding App",
             description: "A beautiful wedding website for James & Apple, featuring RSVP functionality and event details.",
             image: "/assets/james-apple.PNG",
